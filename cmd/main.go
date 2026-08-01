@@ -23,10 +23,10 @@ func main() {
 			fmt.Println("Error: Please provide two words.")
 			return
 		}
-		w1 := os.Args[2]
-		w2 := os.Args[3]
-		dist := levenshtein.Distance(w1, w2)
-		fmt.Printf("Distance between %q and %q = %d\n", w1, w2, dist)
+		word1 := os.Args[2]
+		word2 := os.Args[3]
+		distance := levenshtein.Distance(word1, word2)
+		fmt.Printf("Distance between %q and %q = %d\n", word1, word2, distance)
 
 	case "closest":
 		if len(os.Args) < 4 {
