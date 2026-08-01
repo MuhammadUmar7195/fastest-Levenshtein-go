@@ -87,6 +87,24 @@ func TestFind(t *testing.T) {
 	}
 }
 
+func TestSimilarity(t *testing.T) {
+	if Similarity("", "") != 1 {
+		t.Errorf("Similarity('','') should be 1")
+	}
+	if Similarity("same", "same") != 1 {
+		t.Errorf("Similarity('same','same') should be 1")
+	}
+	if Similarity("fast", "faster") < 0.5 {
+		t.Errorf("Similarity('fast','faster') should be >= 0.5")
+	}
+	if Similarity("abc", "xyz") != 0 {
+		t.Errorf("Similarity('abc','xyz') should be 0")
+	}
+	if Similarity("a", "") != 0 {
+		t.Errorf("Similarity('a','') should be 0")
+	}
+}
+
 func TestClosestParallel(t *testing.T) {
 	// Test small array (< 200 items)
 	smallArr := []string{"apple", "banana", "cherry"}

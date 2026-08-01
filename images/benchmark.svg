@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="850" height="520" viewBox="0 0 850 520" xmlns="http://www.w3.org/2000/svg">
+<svg width="880" height="520" viewBox="0 0 880 520" xmlns="http://www.w3.org/2000/svg">
   <style>
     .bg { fill: #ffffff; }
-    .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #24292e; text-anchor: middle; }
-    .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 14px; fill: #586069; text-anchor: middle; }
+    .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 20px; font-weight: bold; fill: #24292e; text-anchor: middle; }
+    .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; fill: #586069; text-anchor: middle; }
     .axis { stroke: #e1e4e8; stroke-width: 1; }
     .grid { stroke: #eaecef; stroke-width: 1; stroke-dasharray: 4 4; }
-    .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #586069; text-anchor: middle; }
-    .y-label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 11px; fill: #586069; text-anchor: end; }
-    .bar-go { fill: #007acd; transition: fill 0.3s; }
-    .bar-go:hover { fill: #0056b3; }
-    .bar-val { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 10px; fill: #24292e; text-anchor: middle; }
-    .legend-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #24292e; }
+    .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #586069; text-anchor: middle; }
+    .y-label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; fill: #586069; text-anchor: end; }
+    .bar-go { fill: #007acd; }
+    .bar-ts { fill: #e34c26; }
+    .bar-val { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 10px; fill: #24292e; text-anchor: middle; }
+    .legend-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #24292e; }
   </style>
 
-  <rect width="850" height="520" class="bg" rx="8" />
+  <rect width="880" height="520" class="bg" rx="8" />
 
-  <!-- Title & Subtitle -->
-  <text x="425" y="35" class="title">Levenshtein-go Performance Benchmark</text>
-  <text x="425" y="55" class="subtitle">Execution Time (ns/op, lower is better) across Input String Lengths (N)</text>
+  <text x="440" y="35" class="title">Levenshtein Distance Throughput: Go Port vs Original TypeScript</text>
+  <text x="440" y="55" class="subtitle">ops/sec across 500 pairs of length-N strings (higher is better, same machine)</text>
 
-  <!-- Legend -->
-  <rect x="350" y="70" width="14" height="14" fill="#007acd" rx="2" />
-  <text x="370" y="82" class="legend-text">Go Port (Myers' Bit-Parallel)</text>
+  <rect x="300" y="70" width="14" height="14" fill="#007acd" rx="2" />
+  <text x="320" y="82" class="legend-text">Go Port (byte-indexed Myers)</text>
+  <rect x="510" y="70" width="14" height="14" fill="#e34c26" rx="2" />
+  <text x="530" y="82" class="legend-text">fastest-levenshtein (TypeScript)</text>
 
-  <!-- Axes & Grid -->
-  <line x1="80" y1="110" x2="80" y2="440" class="axis" />
-  <line x1="80" y1="440" x2="820" y2="440" class="axis" />
+  <line x1="80" y1="120" x2="80" y2="430" class="axis" />
+  <line x1="80" y1="430" x2="820" y2="430" class="axis" />
 
-  <!-- Grid lines & Y labels (Max 1,600,000 ns/op) -->
+  <!-- Y grid: 0, 5k, 10k, 15k, 20k -->
   <g>
-    <line x1="80" y1="440" x2="820" y2="440" class="grid" /><text x="70" y="444" class="y-label">0</text>
-    <line x1="80" y1="357.5" x2="820" y2="357.5" class="grid" /><text x="70" y="361.5" class="y-label">400k</text>
-    <line x1="80" y1="275" x2="820" y2="275" class="grid" /><text x="70" y="279" class="y-label">800k</text>
-    <line x1="80" y1="192.5" x2="820" y2="192.5" class="grid" /><text x="70" y="196.5" class="y-label">1.2M</text>
-    <line x1="80" y1="110" x2="820" y2="110" class="grid" /><text x="70" y="114" class="y-label">1.6M</text>
+    <line x1="80" y1="430" x2="820" y2="430" class="grid" /><text x="70" y="434" class="y-label">0</text>
+    <line x1="80" y1="352.5" x2="820" y2="352.5" class="grid" /><text x="70" y="356.5" class="y-label">5k</text>
+    <line x1="80" y1="275" x2="820" y2="275" class="grid" /><text x="70" y="279" class="y-label">10k</text>
+    <line x1="80" y1="197.5" x2="820" y2="197.5" class="grid" /><text x="70" y="201.5" class="y-label">15k</text>
+    <line x1="80" y1="120" x2="820" y2="120" class="grid" /><text x="70" y="124" class="y-label">20k</text>
   </g>
-  <rect x="105.0" y="403.9" width="40.0" height="36.1" class="bar-go" rx="3" />  <text x="125.0" y="462" class="label">4</text>  <text x="125.0" y="397.9" class="bar-val">175k</text>  <rect x="180.0" y="400.6" width="40.0" height="39.4" class="bar-go" rx="3" />  <text x="200.0" y="462" class="label">8</text>  <text x="200.0" y="394.6" class="bar-val">191k</text>  <rect x="255.0" y="414.1" width="40.0" height="25.9" class="bar-go" rx="3" />  <text x="275.0" y="462" class="label">16</text>  <text x="275.0" y="408.1" class="bar-val">125k</text>  <rect x="330.0" y="404.3" width="40.0" height="35.7" class="bar-go" rx="3" />  <text x="350.0" y="462" class="label">32</text>  <text x="350.0" y="398.3" class="bar-val">173k</text>  <rect x="405.0" y="404.6" width="40.0" height="35.4" class="bar-go" rx="3" />  <text x="425.0" y="462" class="label">64</text>  <text x="425.0" y="398.6" class="bar-val">172k</text>  <rect x="480.0" y="382.8" width="40.0" height="57.2" class="bar-go" rx="3" />  <text x="500.0" y="462" class="label">128</text>  <text x="500.0" y="376.8" class="bar-val">277k</text>  <rect x="555.0" y="368.2" width="40.0" height="71.8" class="bar-go" rx="3" />  <text x="575.0" y="462" class="label">256</text>  <text x="575.0" y="362.2" class="bar-val">348k</text>  <rect x="630.0" y="318.6" width="40.0" height="121.4" class="bar-go" rx="3" />  <text x="650.0" y="462" class="label">512</text>  <text x="650.0" y="312.6" class="bar-val">589k</text>  <rect x="705.0" y="144.2" width="40.0" height="295.8" class="bar-go" rx="3" />  <text x="725.0" y="462" class="label">1024</text>  <text x="725.0" y="138.2" class="bar-val">1.4M</text></svg>
+  <rect x="74.0" y="135.6" width="24.0" height="294.4" class="bar-go" rx="2" />  <rect x="102.0" y="219.6" width="24.0" height="210.4" class="bar-ts" rx="2" />  <text x="86.0" y="131.6" class="bar-val">19k</text>  <text x="100.0" y="448" class="label">4</text>  <rect x="152.0" y="196.9" width="24.0" height="233.1" class="bar-go" rx="2" />  <rect x="180.0" y="354.2" width="24.0" height="75.8" class="bar-ts" rx="2" />  <text x="164.0" y="192.9" class="bar-val">15k</text>  <text x="178.0" y="448" class="label">8</text>  <rect x="230.0" y="312.2" width="24.0" height="117.8" class="bar-go" rx="2" />  <rect x="258.0" y="379.5" width="24.0" height="50.5" class="bar-ts" rx="2" />  <text x="242.0" y="308.2" class="bar-val">8k</text>  <text x="256.0" y="448" class="label">16</text>  <rect x="308.0" y="349.0" width="24.0" height="81.0" class="bar-go" rx="2" />  <rect x="336.0" y="404.4" width="24.0" height="25.6" class="bar-ts" rx="2" />  <text x="320.0" y="345.0" class="bar-val">5k</text>  <text x="334.0" y="448" class="label">32</text>  <rect x="386.0" y="418.0" width="24.0" height="12.0" class="bar-go" rx="2" />  <rect x="414.0" y="426.1" width="24.0" height="3.9" class="bar-ts" rx="2" />  <text x="398.0" y="414.0" class="bar-val">1k</text>  <text x="412.0" y="448" class="label">64</text>  <rect x="464.0" y="427.1" width="24.0" height="2.9" class="bar-go" rx="2" />  <rect x="492.0" y="428.0" width="24.0" height="2.0" class="bar-ts" rx="2" />  <text x="476.0" y="423.1" class="bar-val">0k</text>  <text x="490.0" y="448" class="label">128</text>  <rect x="542.0" y="429.1" width="24.0" height="0.9" class="bar-go" rx="2" />  <rect x="570.0" y="429.5" width="24.0" height="0.5" class="bar-ts" rx="2" />  <text x="554.0" y="425.1" class="bar-val">0k</text>  <text x="568.0" y="448" class="label">256</text>  <rect x="620.0" y="429.8" width="24.0" height="0.2" class="bar-go" rx="2" />  <rect x="648.0" y="429.9" width="24.0" height="0.1" class="bar-ts" rx="2" />  <text x="632.0" y="425.8" class="bar-val">0k</text>  <text x="646.0" y="448" class="label">512</text>  <rect x="698.0" y="429.9" width="24.0" height="0.1" class="bar-go" rx="2" />  <rect x="726.0" y="430.0" width="24.0" height="0.0" class="bar-ts" rx="2" />  <text x="710.0" y="425.9" class="bar-val">0k</text>  <text x="724.0" y="448" class="label">1024</text></svg>

@@ -5,6 +5,16 @@ import (
 	"runtime"
 )
 
+// peqSize is the number of distinct byte values in a string.
+//
+// The original TypeScript implementation indexes its equality-bit table by
+// UTF-16 code units (0..0xFFFF), which requires a 0x10000-element array.
+// Go strings are byte sequences, so byte values are always in 0..255.
+// Indexing by byte therefore shrinks the hot lookup table from 256 KiB to
+// 1 KiB (a 256x reduction), which eliminates the per-call allocation that
+// dominated the original port's memory profile.
+const peqSize = 256
+
 // Distance calculates the Levenshtein distance between two strings.
 func Distance(a, b string) int {
 	if len(a) < len(b) {
@@ -17,6 +27,22 @@ func Distance(a, b string) int {
 		return myers32(a, b)
 	}
 	return myersX(a, b)
+}
+
+// Similarity returns a normalized similarity score in [0, 1] between two
+// strings, where 1 means identical and 0 means completely different.
+//
+// It is a convenience layer on top of Distance that the original
+// TypeScript package does not provide.
+func Similarity(a, b string) float64 {
+	maxLen := len(a)
+	if len(b) > maxLen {
+		maxLen = len(b)
+	}
+	if maxLen == 0 {
+		return 1
+	}
+	return 1 - float64(Distance(a, b))/float64(maxLen)
 }
 
 // Closest finds the closest string in an array to the target string.
@@ -92,7 +118,7 @@ func ClosestParallel(target string, array []string) string {
 }
 
 func myers32(a, b string) int {
-	var equalityBits [0x10000]uint32
+	var equalityBits [peqSize]uint32
 	aLength := len(a)
 	bLength := len(b)
 	lastBit := uint32(1 << uint(aLength-1))
@@ -127,7 +153,7 @@ func myers32(a, b string) int {
 }
 
 func myersX(longer, shorter string) int {
-	var equalityBits [0x10000]uint32
+	var equalityBits [peqSize]uint32
 	shorterLength := len(shorter)
 	longerLength := len(longer)
 	horizontalSize := (shorterLength + 31) / 32

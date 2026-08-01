@@ -5,24 +5,33 @@ import (
 	"testing"
 )
 
-func benchmarkLen(b *testing.B, n int) {
-	s1 := makeID(n)
-	s2 := makeID(n)
+// benchmarkPairs generates 1000 random strings of length n and computes
+// distance across 500 consecutive pairs, mirroring the original
+// fastest-levenshtein bench.ts methodology so ops/sec are directly
+// comparable to the published TypeScript numbers.
+func benchmarkPairs(b *testing.B, n int) {
+	const arrSize = 1000
+	arr := make([]string, arrSize)
+	for i := range arr {
+		arr[i] = makeID(n)
+	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		Distance(s1, s2)
+		for j := 0; j < arrSize-1; j += 2 {
+			Distance(arr[j], arr[j+1])
+		}
 	}
 }
 
-func BenchmarkLen4(b *testing.B)    { benchmarkLen(b, 4) }
-func BenchmarkLen8(b *testing.B)    { benchmarkLen(b, 8) }
-func BenchmarkLen16(b *testing.B)   { benchmarkLen(b, 16) }
-func BenchmarkLen32(b *testing.B)   { benchmarkLen(b, 32) }
-func BenchmarkLen64(b *testing.B)   { benchmarkLen(b, 64) }
-func BenchmarkLen128(b *testing.B)  { benchmarkLen(b, 128) }
-func BenchmarkLen256(b *testing.B)  { benchmarkLen(b, 256) }
-func BenchmarkLen512(b *testing.B)  { benchmarkLen(b, 512) }
-func BenchmarkLen1024(b *testing.B) { benchmarkLen(b, 1024) }
+func BenchmarkPairs4(b *testing.B)    { benchmarkPairs(b, 4) }
+func BenchmarkPairs8(b *testing.B)    { benchmarkPairs(b, 8) }
+func BenchmarkPairs16(b *testing.B)   { benchmarkPairs(b, 16) }
+func BenchmarkPairs32(b *testing.B)   { benchmarkPairs(b, 32) }
+func BenchmarkPairs64(b *testing.B)   { benchmarkPairs(b, 64) }
+func BenchmarkPairs128(b *testing.B)  { benchmarkPairs(b, 128) }
+func BenchmarkPairs256(b *testing.B)  { benchmarkPairs(b, 256) }
+func BenchmarkPairs512(b *testing.B)  { benchmarkPairs(b, 512) }
+func BenchmarkPairs1024(b *testing.B) { benchmarkPairs(b, 1024) }
 
 func BenchmarkClosestParallel(b *testing.B) {
 	target := "benchmark"
