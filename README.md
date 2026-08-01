@@ -1,4 +1,4 @@
-# Fastest Levenshtein (Go Port) 🚀
+# Fastest Levenshtein (Go Port)
 
 > High-performance bit-parallel Levenshtein distance implementation in Go, ported from TypeScript with native multi-core concurrency enhancements.
 
@@ -7,14 +7,14 @@
 
 ---
 
-## 🌟 Architectural Enhancements Over Original
+## Architectural Enhancements Over Original
 
 1. **Myers' Bit-Parallel Algorithm**: Translated 1:1 with precise bitwise coercion matching JavaScript's 32-bit operations (`& 31`).
 2. **Concurrent Batch Processing (`ClosestParallel`)**: Leverages Go goroutines and channels to distribute large array searches across multi-core CPUs—an architectural innovation absent in the single-threaded TypeScript version.
 
 ---
 
-## 📊 Benchmarks & Performance
+## Benchmarks & Performance
 
 | Operation | Input Size | Go Port Ops/sec |
 | ----------- | ------------ | ----------------- |
@@ -27,7 +27,7 @@
 
 ---
 
-## 🚀 Quick Start & Usage
+## Quick Start & Usage
 
 ```go
 package main
@@ -40,17 +40,17 @@ import (
 func main() {
  // Calculate distance
  dist := levenshtein.Distance("fast", "faster")
- fmt.Println("Distance:", dist) // Output: 2
+ fmt.Println("Distance:", dist)
 
  // Find closest string
  closest := levenshtein.Closest("fast", []string{"slow", "faster", "fastest"})
- fmt.Println("Closest:", closest) // Output: "faster"
+ fmt.Println("Closest:", closest)
 }
 ```
 
 ---
 
-## 🧪 Testing & Verification
+## Testing & Verification
 
 All tests are validated against 1,000+ randomized differential test cases:
 
@@ -63,6 +63,6 @@ go test -v -cover ./...
 
 ---
 
-## 📂 Documentation
+## Documentation
 
 See [DECISIONS.md](DECISIONS.md) for detailed architectural trade-offs, bitwise shift analysis, and differential test verification reports.
