@@ -16,17 +16,17 @@ import (
 const peqSize = 256
 
 // Distance calculates the Levenshtein distance between two strings.
-func Distance(a, b string) int {
-	if len(a) < len(b) {
-		a, b = b, a
+func Distance(first, second string) int {
+	if len(first) < len(second) {
+		first, second = second, first
 	}
-	if len(b) == 0 {
-		return len(a)
+	if len(second) == 0 {
+		return len(first)
 	}
-	if len(a) <= 32 {
-		return myers32(a, b)
+	if len(first) <= 32 {
+		return myers32(first, second)
 	}
-	return myersX(a, b)
+	return myersX(first, second)
 }
 
 // Similarity returns a normalized similarity score in [0, 1] between two
@@ -34,106 +34,106 @@ func Distance(a, b string) int {
 //
 // It is a convenience layer on top of Distance that the original
 // TypeScript package does not provide.
-func Similarity(a, b string) float64 {
-	maxLen := len(a)
-	if len(b) > maxLen {
-		maxLen = len(b)
+func Similarity(first, second string) float64 {
+	maxLength := len(first)
+	if len(second) > maxLength {
+		maxLength = len(second)
 	}
-	if maxLen == 0 {
+	if maxLength == 0 {
 		return 1
 	}
-	return 1 - float64(Distance(a, b))/float64(maxLen)
+	return 1 - float64(Distance(first, second))/float64(maxLength)
 }
 
 // Closest finds the closest string in an array to the target string.
-func Closest(target string, array []string) string {
-	if len(array) == 0 {
+func Closest(target string, candidates []string) string {
+	if len(candidates) == 0 {
 		return ""
 	}
 	minDistance := math.MaxInt
 	minIndex := 0
-	for i, s := range array {
-		dist := Distance(target, s)
+	for index, candidate := range candidates {
+		dist := Distance(target, candidate)
 		if dist < minDistance {
 			minDistance = dist
-			minIndex = i
+			minIndex = index
 		}
 	}
-	return array[minIndex]
+	return candidates[minIndex]
 }
 
 // ClosestParallel finds the closest string in an array concurrently using goroutines.
 // This is an architectural optimization leveraging Go's multi-core concurrency model.
-func ClosestParallel(target string, array []string) string {
-	if len(array) == 0 {
+func ClosestParallel(target string, candidates []string) string {
+	if len(candidates) == 0 {
 		return ""
 	}
-	if len(array) < 200 {
-		return Closest(target, array)
+	if len(candidates) < 200 {
+		return Closest(target, candidates)
 	}
 
 	numWorkers := runtime.NumCPU()
-	chunkSize := (len(array) + numWorkers - 1) / numWorkers
+	chunkSize := (len(candidates) + numWorkers - 1) / numWorkers
 
 	type workerResult struct {
-		minDist int
-		minIdx  int
+		minDistance int
+		minIndex    int
 	}
 
 	results := make(chan workerResult, numWorkers)
 
-	for w := 0; w < numWorkers; w++ {
-		start := w * chunkSize
+	for worker := 0; worker < numWorkers; worker++ {
+		start := worker * chunkSize
 		end := start + chunkSize
-		if end > len(array) {
-			end = len(array)
+		if end > len(candidates) {
+			end = len(candidates)
 		}
 
 		go func(subset []string, offset int) {
-			minDist := math.MaxInt
-			minIdx := 0
-			for i, s := range subset {
-				dist := Distance(target, s)
-				if dist < minDist {
-					minDist = dist
-					minIdx = offset + i
+			minDistance := math.MaxInt
+			minIndex := 0
+			for index, candidate := range subset {
+				dist := Distance(target, candidate)
+				if dist < minDistance {
+					minDistance = dist
+					minIndex = offset + index
 				}
 			}
-			results <- workerResult{minDist, minIdx}
-		}(array[start:end], start)
+			results <- workerResult{minDistance, minIndex}
+		}(candidates[start:end], start)
 	}
 
-	globalMinDist := math.MaxInt
-	globalMinIdx := 0
+	globalMinDistance := math.MaxInt
+	globalMinIndex := 0
 
-	for i := 0; i < numWorkers; i++ {
-		res := <-results
-		if res.minDist < globalMinDist {
-			globalMinDist = res.minDist
-			globalMinIdx = res.minIdx
+	for worker := 0; worker < numWorkers; worker++ {
+		result := <-results
+		if result.minDistance < globalMinDistance {
+			globalMinDistance = result.minDistance
+			globalMinIndex = result.minIndex
 		}
 	}
 
-	return array[globalMinIdx]
+	return candidates[globalMinIndex]
 }
 
-func myers32(a, b string) int {
+func myers32(first, second string) int {
 	var equalityBits [peqSize]uint32
-	aLength := len(a)
-	bLength := len(b)
-	lastBit := uint32(1 << uint(aLength-1))
+	firstLength := len(first)
+	secondLength := len(second)
+	lastBit := uint32(1 << uint(firstLength-1))
 	var plusVector uint32 = 0xFFFFFFFF
 	var minusVector uint32 = 0
-	score := aLength
-	i := aLength
+	score := firstLength
+	index := firstLength
 
-	for i > 0 {
-		i--
-		equalityBits[a[i]] |= 1 << uint(i)
+	for index > 0 {
+		index--
+		equalityBits[first[index]] |= 1 << uint(index)
 	}
 
-	for i = 0; i < bLength; i++ {
-		equality := equalityBits[b[i]]
+	for index = 0; index < secondLength; index++ {
+		equality := equalityBits[second[index]]
 		xVector := equality | minusVector
 		equality |= ((equality & plusVector) + plusVector) ^ plusVector
 		minusVector |= ^(equality | plusVector)
@@ -161,56 +161,56 @@ func myersX(longer, shorter string) int {
 	plusCarry := make([]uint32, horizontalSize)
 	minusCarry := make([]uint32, horizontalSize)
 
-	for i := 0; i < horizontalSize; i++ {
-		plusCarry[i] = 0xFFFFFFFF
-		minusCarry[i] = 0
+	for index := 0; index < horizontalSize; index++ {
+		plusCarry[index] = 0xFFFFFFFF
+		minusCarry[index] = 0
 	}
 
-	j := 0
-	for ; j < verticalSize-1; j++ {
+	verticalBlock := 0
+	for ; verticalBlock < verticalSize-1; verticalBlock++ {
 		var minusVector uint32 = 0
 		var plusVector uint32 = 0xFFFFFFFF
-		start := j * 32
-		verticalEnd := int(math.Min(32, float64(longerLength))) + start
-		for k := start; k < verticalEnd; k++ {
-			equalityBits[longer[k]] |= 1 << uint(k&31)
+		blockStart := verticalBlock * 32
+		blockEnd := int(math.Min(32, float64(longerLength))) + blockStart
+		for byteIndex := blockStart; byteIndex < blockEnd; byteIndex++ {
+			equalityBits[longer[byteIndex]] |= 1 << uint(byteIndex&31)
 		}
-		for i := 0; i < shorterLength; i++ {
-			equality := equalityBits[shorter[i]]
-			plusBit := (plusCarry[i/32] >> uint(i&31)) & 1
-			minusBit := (minusCarry[i/32] >> uint(i&31)) & 1
+		for index := 0; index < shorterLength; index++ {
+			equality := equalityBits[shorter[index]]
+			plusBit := (plusCarry[index/32] >> uint(index&31)) & 1
+			minusBit := (minusCarry[index/32] >> uint(index&31)) & 1
 			xVector := equality | minusVector
 			xHorizontal := ((((equality | minusBit) & plusVector) + plusVector) ^ plusVector) | equality | minusBit
 			plusHorizontal := minusVector | ^(xHorizontal | plusVector)
 			minusHorizontal := plusVector & xHorizontal
 			if ((plusHorizontal >> 31) ^ plusBit) != 0 {
-				plusCarry[i/32] ^= 1 << uint(i&31)
+				plusCarry[index/32] ^= 1 << uint(index&31)
 			}
 			if ((minusHorizontal >> 31) ^ minusBit) != 0 {
-				minusCarry[i/32] ^= 1 << uint(i&31)
+				minusCarry[index/32] ^= 1 << uint(index&31)
 			}
 			plusHorizontal = (plusHorizontal << 1) | plusBit
 			minusHorizontal = (minusHorizontal << 1) | minusBit
 			plusVector = minusHorizontal | ^(xVector | plusHorizontal)
 			minusVector = plusHorizontal & xVector
 		}
-		for k := start; k < verticalEnd; k++ {
-			equalityBits[longer[k]] = 0
+		for byteIndex := blockStart; byteIndex < blockEnd; byteIndex++ {
+			equalityBits[longer[byteIndex]] = 0
 		}
 	}
 
 	var minusVector uint32 = 0
 	var plusVector uint32 = 0xFFFFFFFF
-	start := j * 32
-	verticalEnd := int(math.Min(32, float64(longerLength-start))) + start
-	for k := start; k < verticalEnd; k++ {
-		equalityBits[longer[k]] |= 1 << uint(k&31)
+	blockStart := verticalBlock * 32
+	blockEnd := int(math.Min(32, float64(longerLength-blockStart))) + blockStart
+	for byteIndex := blockStart; byteIndex < blockEnd; byteIndex++ {
+		equalityBits[longer[byteIndex]] |= 1 << uint(byteIndex&31)
 	}
 	score := longerLength
-	for i := 0; i < shorterLength; i++ {
-		equality := equalityBits[shorter[i]]
-		plusBit := (plusCarry[i/32] >> uint(i&31)) & 1
-		minusBit := (minusCarry[i/32] >> uint(i&31)) & 1
+	for index := 0; index < shorterLength; index++ {
+		equality := equalityBits[shorter[index]]
+		plusBit := (plusCarry[index/32] >> uint(index&31)) & 1
+		minusBit := (minusCarry[index/32] >> uint(index&31)) & 1
 		xVector := equality | minusVector
 		xHorizontal := ((((equality | minusBit) & plusVector) + plusVector) ^ plusVector) | equality | minusBit
 		plusHorizontal := minusVector | ^(xHorizontal | plusVector)
@@ -218,18 +218,18 @@ func myersX(longer, shorter string) int {
 		score += int((plusHorizontal >> uint((longerLength-1)&31)) & 1)
 		score -= int((minusHorizontal >> uint((longerLength-1)&31)) & 1)
 		if ((plusHorizontal >> 31) ^ plusBit) != 0 {
-			plusCarry[i/32] ^= 1 << uint(i&31)
+			plusCarry[index/32] ^= 1 << uint(index&31)
 		}
 		if ((minusHorizontal >> 31) ^ minusBit) != 0 {
-			minusCarry[i/32] ^= 1 << uint(i&31)
+			minusCarry[index/32] ^= 1 << uint(index&31)
 		}
 		plusHorizontal = (plusHorizontal << 1) | plusBit
 		minusHorizontal = (minusHorizontal << 1) | minusBit
 		plusVector = minusHorizontal | ^(xVector | plusHorizontal)
 		minusVector = plusHorizontal & xVector
 	}
-	for k := start; k < verticalEnd; k++ {
-		equalityBits[longer[k]] = 0
+	for byteIndex := blockStart; byteIndex < blockEnd; byteIndex++ {
+		equalityBits[longer[byteIndex]] = 0
 	}
 	return score
 }
