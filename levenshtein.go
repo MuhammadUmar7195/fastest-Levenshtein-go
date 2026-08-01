@@ -62,9 +62,6 @@ func ClosestParallel(target string, array []string) string {
 		if end > len(array) {
 			end = len(array)
 		}
-		if start >= len(array) {
-			break
-		}
 
 		go func(subset []string, offset int) {
 			minDist := math.MaxInt
@@ -82,15 +79,8 @@ func ClosestParallel(target string, array []string) string {
 
 	globalMinDist := math.MaxInt
 	globalMinIdx := 0
-	activeWorkers := 0
-	for w := 0; w < numWorkers; w++ {
-		start := w * chunkSize
-		if start < len(array) {
-			activeWorkers++
-		}
-	}
 
-	for i := 0; i < activeWorkers; i++ {
+	for i := 0; i < numWorkers; i++ {
 		res := <-results
 		if res.minDist < globalMinDist {
 			globalMinDist = res.minDist

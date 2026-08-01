@@ -1,6 +1,7 @@
 package levenshtein
 
 import (
+	"fmt"
 	"math/rand"
 	"testing"
 )
@@ -79,5 +80,31 @@ func TestFind(t *testing.T) {
 	expected := "faster"
 	if actual != expected {
 		t.Errorf("Closest = %q; expected %q", actual, expected)
+	}
+
+	if Closest("fast", []string{}) != "" {
+		t.Errorf("Expected empty string for empty array")
+	}
+}
+
+func TestClosestParallel(t *testing.T) {
+	// Test small array (< 200 items)
+	smallArr := []string{"apple", "banana", "cherry"}
+	if ClosestParallel("app", smallArr) != "apple" {
+		t.Errorf("ClosestParallel small array failed")
+	}
+
+	if ClosestParallel("app", []string{}) != "" {
+		t.Errorf("ClosestParallel empty array failed")
+	}
+
+	// Test large array (>= 200 items)
+	largeArr := make([]string, 500)
+	for i := range largeArr {
+		largeArr[i] = fmt.Sprintf("word-%d", i)
+	}
+	largeArr[250] = "targetword"
+	if ClosestParallel("target", largeArr) != "targetword" {
+		t.Errorf("ClosestParallel large array failed")
 	}
 }

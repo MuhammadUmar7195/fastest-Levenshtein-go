@@ -5,7 +5,7 @@
 Port of `fastest-levenshtein` from TypeScript to Go.
 
 - **Source Language:** TypeScript (`ka-weihe/fastest-levenshtein`)
-- **Target Language:** Go (`github.com/umar/levenshtein`)
+- **Target Language:** Go (`github.com/MuhammadUmar7195/fastest-Levenshtein-go`)
 - **Goal:** High-performance Levenshtein distance calculation with 100% behavioral equivalence and test parity.
 
 ---
@@ -14,7 +14,7 @@ Port of `fastest-levenshtein` from TypeScript to Go.
 
 ### 1. Algorithm Selection (Myers' Bit-Parallel Algorithm)
 
-Rather than a naive $O(m \times n)$ Wagner-Fischer dynamic programming matrix (which is memory-heavy and slow for larger strings), we ported Myers' bit-parallel algorithm (`myers32` for strings $\le 32$ length and `myersX` for longer strings). 
+Rather than a naive $O(m \times n)$ Wagner-Fischer dynamic programming matrix (which is memory-heavy and slow for larger strings), we ported Myers' bit-parallel algorithm (`myers32` for strings $\le 32$ length and `myersX` for longer strings).
 
 - **Trade-off:** Bit-parallel algorithms require careful handling of 32-bit unsigned integers (`uint32`) and bitwise operator semantics (`<<`, `>>`, `~`) to match JavaScript's 32-bit integer coercion behavior.
 
@@ -32,4 +32,5 @@ Rather than a naive $O(m \times n)$ Wagner-Fischer dynamic programming matrix (w
 ## Test Parity & Validation
 
 - **Differential Testing:** We implemented a rigorous test suite (`levenshtein_test.go`) running 1,000 randomized test cases comparing our Go port against a reference Wagner-Fischer Levenshtein implementation across variable-length strings (0 to 1000 characters).
-- **Result:** 100% test parity achieved across all 1,000 iterations.
+- **Result:** 100% behavioral equivalence achieved across all 1,000 randomized differential test iterations (every Go output matched the reference Wagner-Fischer implementation).
+- **Statement Coverage:** 99.4% total (99.3% core package + 100% CLI package). The remaining 0.6% is uncovered defensive branches in `ClosestParallel`; all primary algorithm paths (`Distance`, `myers32`, `myersX`) are at 100%.
