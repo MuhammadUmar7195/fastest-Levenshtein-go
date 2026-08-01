@@ -1,6 +1,7 @@
 package levenshtein
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -28,5 +29,17 @@ func BenchmarkClosest(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		Closest(target, arr)
+	}
+}
+
+func BenchmarkClosestParallel(b *testing.B) {
+	target := "benchmark"
+	arr := make([]string, 10000)
+	for i := range arr {
+		arr[i] = fmt.Sprintf("string-%d", i)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		ClosestParallel(target, arr)
 	}
 }

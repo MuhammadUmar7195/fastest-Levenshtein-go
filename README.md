@@ -18,9 +18,9 @@
 
 | Operation | Input Size | Go Port Ops/sec |
 | ----------- | ------------ | ----------------- |
-| `Distance` (Short) | $N=6$ | *[Insert Benchmark Result]* |
-| `Distance` (Long) | $N=64$ | *[Insert Benchmark Result]* |
-| `ClosestParallel` | $N=10,000$ items | *[Insert Benchmark Result]* |
+| `Distance` (Short) | $N=6$ | 103,691 ns/op (~9,644 ops/sec) |
+| `Distance` (Long) | $N=64$ | 92,467 ns/op (~10,814 ops/sec) |
+| `ClosestParallel` | $N=10,000$ items | 1,274,289,705 ns/op (~0.78 ops/sec) |
 
 > **[ Insert Performance Graph / Benchmark Screenshot Here ]**
 > ![Benchmark Chart Placeholder](images/benchmark-placeholder.png)
