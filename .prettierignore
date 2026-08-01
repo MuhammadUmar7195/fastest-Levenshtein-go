@@ -1,0 +1,7 @@
+node_modules/
+dist/
+build/
+*.go
+go.mod
+go.sum
+images/

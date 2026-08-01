@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill: #ffffff; }
+    .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #24292e; text-anchor: middle; }
+    .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 14px; fill: #586069; text-anchor: middle; }
+    .axis { stroke: #e1e4e8; stroke-width: 1; }
+    .grid { stroke: #eaecef; stroke-width: 1; stroke-dasharray: 4 4; }
+    .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #586069; text-anchor: middle; }
+    .y-label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 11px; fill: #586069; text-anchor: end; }
+    .bar-go { fill: #007acd; transition: fill 0.3s; }
+    .bar-go:hover { fill: #0056b3; }
+    .bar-val { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 10px; fill: #24292e; text-anchor: middle; }
+    .legend-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #24292e; }
+  </style>
+
+  <rect width="800" height="500" class="bg" rx="8" />
+
+  <!-- Title & Subtitle -->
+  <text x="400" y="35" class="title">Levenshtein-go Performance Benchmark</text>
+  <text x="400" y="55" class="subtitle">Execution Time (ns/op, lower is better) across Input String Lengths (N)</text>
+
+  <!-- Legend -->
+  <rect x="330" y="70" width="14" height="14" fill="#007acd" rx="2" />
+  <text x="350" y="82" class="legend-text">Go Port (Myers' Bit-Parallel)</text>
+
+  <!-- Axes & Grid -->
+  <line x1="80" y1="110" x2="80" y2="420" class="axis" />
+  <line x1="80" y1="420" x2="750" y2="420" class="axis" />
+
+  <!-- Grid lines & Y labels -->
+  <!-- Max value ~ 1,600,000 ns/op -->
+  <!-- Steps: 0, 400k, 800k, 1.2M, 1.6M -->
+  <g>
+    <line x1="80" y1="420" x2="750" y2="420" class="grid" /><text x="70" y="424" class="y-label">0</text>
+    <line x1="80" y1="342" x2="750" y2="342" class="grid" /><text x="70" y="346" class="y-label">400k</text>
+    <line x1="80" y1="264" x2="750" y2="264" class="grid" /><text x="70" y="268" class="y-label">800k</text>
+    <line x1="80" y1="186" x2="750" y2="186" class="grid" /><text x="70" y="190" class="y-label">1.2M</text>
+    <line x1="80" y1="108" x2="750" y2="108" class="grid" /><text x="70" y="112" class="y-label">1.6M</text>
+  </g>
+
+  <!-- Bars and X labels -->
+  <!-- 9 data points: 4, 8, 16, 32, 64, 128, 256, 512, 1024 -->
+  <!-- Data (ns/op): 188844, 151894, 259825, 187421, 116144, 244516, 224352, 592493, 1468677 -->
+  <rect x="97.0" y="383.2" width="36.0" height="36.8" class="bar-go" rx="3" />\n  <text x="115.0" y="440" class="label">4</text>\n  <text x="115.0" y="377.2" class="bar-val">189k</text>\n  <rect x="165.0" y="390.4" width="36.0" height="29.6" class="bar-go" rx="3" />\n  <text x="183.0" y="440" class="label">8</text>\n  <text x="183.0" y="384.4" class="bar-val">152k</text>\n  <rect x="233.0" y="369.3" width="36.0" height="50.7" class="bar-go" rx="3" />\n  <text x="251.0" y="440" class="label">16</text>\n  <text x="251.0" y="363.3" class="bar-val">260k</text>\n  <rect x="301.0" y="383.5" width="36.0" height="36.5" class="bar-go" rx="3" />\n  <text x="319.0" y="440" class="label">32</text>\n  <text x="319.0" y="377.5" class="bar-val">187k</text>\n  <rect x="369.0" y="397.4" width="36.0" height="22.6" class="bar-go" rx="3" />\n  <text x="387.0" y="440" class="label">64</text>\n  <text x="387.0" y="391.4" class="bar-val">116k</text>\n  <rect x="437.0" y="372.3" width="36.0" height="47.7" class="bar-go" rx="3" />\n  <text x="455.0" y="440" class="label">128</text>\n  <text x="455.0" y="366.3" class="bar-val">245k</text>\n  <rect x="505.0" y="376.3" width="36.0" height="43.7" class="bar-go" rx="3" />\n  <text x="523.0" y="440" class="label">256</text>\n  <text x="523.0" y="370.3" class="bar-val">224k</text>\n  <rect x="573.0" y="304.5" width="36.0" height="115.5" class="bar-go" rx="3" />\n  <text x="591.0" y="440" class="label">512</text>\n  <text x="591.0" y="298.5" class="bar-val">592k</text>\n  <rect x="641.0" y="133.6" width="36.0" height="286.4" class="bar-go" rx="3" />\n  <text x="659.0" y="440" class="label">1024</text>\n  <text x="659.0" y="127.6" class="bar-val">1.5M</text>\n</svg>

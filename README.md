@@ -22,8 +22,8 @@
 | `Distance` (Long) | $N=64$ | 92,467 ns/op (~10,814 ops/sec) |
 | `ClosestParallel` | $N=10,000$ items | 1,274,289,705 ns/op (~0.78 ops/sec) |
 
-> **[ Insert Performance Graph / Benchmark Screenshot Here ]**
-> ![Benchmark Chart Placeholder](images/benchmark-placeholder.png)
+> **Performance Benchmark Chart (Execution Time ns/op vs String Length N):**
+> ![Levenshtein-go Benchmark Chart](images/benchmark.svg)
 
 ---
 
