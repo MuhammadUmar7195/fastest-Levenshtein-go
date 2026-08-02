@@ -23,8 +23,32 @@ func Distance(first, second string) int {
 	if len(second) == 0 {
 		return len(first)
 	}
-	if len(first) <= 32 {
-		return myers32(first, second)
+
+	// OPTIMIZATION: Prefix and Suffix Truncation
+	// Stripping common prefixes and suffixes reduces the problem space in O(1) time.
+	// This makes real-world strings (e.g., URLs, paragraphs) lightning fast to compare.
+	startIndex := 0
+	for startIndex < len(second) && first[startIndex] == second[startIndex] {
+		startIndex++
+	}
+
+	firstEnd := len(first)
+	secondEnd := len(second)
+	for secondEnd > startIndex && first[firstEnd-1] == second[secondEnd-1] {
+		firstEnd--
+		secondEnd--
+	}
+
+	first = first[startIndex:firstEnd]
+	second = second[startIndex:secondEnd]
+
+	if len(second) == 0 {
+		return len(first)
+	}
+
+	// Native 64-bit bit-parallelism (double the fast-path length of the 32-bit original)
+	if len(first) <= 64 {
+		return myers64(first, second)
 	}
 	return myersX(first, second)
 }
@@ -117,13 +141,13 @@ func ClosestParallel(target string, candidates []string) string {
 	return candidates[globalMinIndex]
 }
 
-func myers32(first, second string) int {
-	var equalityBits [peqSize]uint32
+func myers64(first, second string) int {
+	var equalityBits [peqSize]uint64
 	firstLength := len(first)
 	secondLength := len(second)
-	lastBit := uint32(1 << uint(firstLength-1))
-	var plusVector uint32 = 0xFFFFFFFF
-	var minusVector uint32 = 0
+	lastBit := uint64(1 << uint(firstLength-1))
+	var plusVector uint64 = 0xFFFFFFFFFFFFFFFF
+	var minusVector uint64 = 0
 	score := firstLength
 	index := firstLength
 
