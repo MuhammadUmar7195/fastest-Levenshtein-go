@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B1226" />
+      <stop offset="100%" stop-color="#060B18" />
+    </linearGradient>
+
+    <!-- Letter F Gradient (Cyan/Teal) -->
+    <linearGradient id="fGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F6FF" />
+      <stop offset="50%" stop-color="#00D2FF" />
+      <stop offset="100%" stop-color="#00A0FF" />
+    </linearGradient>
+
+    <!-- Letter L Gradient (Royal Blue) -->
+    <linearGradient id="lGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0080FF" />
+      <stop offset="50%" stop-color="#0055FF" />
+      <stop offset="100%" stop-color="#002BCC" />
+    </linearGradient>
+
+    <!-- Arrow Gradient (Bright Cyan/Electric) -->
+    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00E5FF" />
+      <stop offset="70%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#80F7FF" />
+    </linearGradient>
+
+    <!-- Glow Filters -->
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur1" />
+      <feGaussianBlur stdDeviation="16" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="arrowGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Dark Background -->
+  <rect width="1000" height="600" rx="24" fill="url(#bgGrad)" />
+
+  <!-- LOGO EMBLEM GROUP (CENTERED) -->
+  <g transform="translate(50, -20)">
+    
+    <!-- LEFT HORIZONTAL SPEED TRAILS (BEHIND F) -->
+    <g fill="#00F6FF" filter="url(#neonGlow)">
+      <!-- Upper dash -->
+      <polygon points="300,230 360,230 355,242 295,242" />
+      <!-- Middle long dash -->
+      <polygon points="240,270 340,270 334,284 234,284" />
+      <!-- Lower dash -->
+      <polygon points="280,310 350,310 344,324 274,324" />
+      <!-- Bottom dash -->
+      <polygon points="220,350 340,350 333,366 213,366" />
+    </g>
+
+    <!-- LETTER 'L' (RIGHT / BEHIND) -->
+    <g>
+      <!-- L Outer Glow Rim -->
+      <polygon points="490,200 550,200 520,360 660,360 650,410 450,410" 
+               fill="none" stroke="#00A0FF" stroke-width="6" filter="url(#neonGlow)" opacity="0.7" />
+      <!-- L Main Body -->
+      <polygon points="490,200 550,200 520,360 660,360 650,410 450,410" 
+               fill="url(#lGrad)" stroke="#00D2FF" stroke-width="2" />
+    </g>
+
+    <!-- LETTER 'F' (LEFT / FOREGROUND) -->
+    <g>
+      <!-- F Outer Neon Glow -->
+      <polygon points="350,200 490,200 480,250 410,250 400,285 460,285 450,335 390,335 375,410 315,410 350,200" 
+               fill="none" stroke="#00FFFF" stroke-width="8" filter="url(#neonGlow)" opacity="0.9" />
+      <!-- F Inner Body -->
+      <polygon points="350,200 490,200 480,250 410,250 400,285 460,285 450,335 390,335 375,410 315,410 350,200" 
+               fill="url(#fGrad)" stroke="#A6FAFF" stroke-width="2" />
+    </g>
+
+    <!-- DYNAMIC BURST OF SPEED ARROWS (SHOOTING RIGHT) -->
+    
+    <!-- 1. Central Main Arrow (Long & Sharp) -->
+    <g filter="url(#arrowGlow)">
+      <path d="M 430 298 L 650 298 L 645 285 L 710 305 L 645 325 L 650 312 L 430 312 Z" 
+            fill="url(#arrowGrad)" stroke="#FFFFFF" stroke-width="2" />
+    </g>
+
+    <!-- 2. Top Curved Speed Arrow -->
+    <g filter="url(#arrowGlow)">
+      <path d="M 470 265 Q 560 235 635 255 L 628 242 L 665 262 L 630 282 L 634 270 Q 560 252 470 278 Z" 
+            fill="url(#arrowGrad)" />
+    </g>
+
+    <!-- 3. Bottom Curved Speed Arrow -->
+    <g filter="url(#arrowGlow)">
+      <path d="M 430 340 Q 530 365 625 338 L 620 325 L 655 345 L 622 363 L 624 350 Q 530 378 430 352 Z" 
+            fill="url(#arrowGrad)" />
+    </g>
+
+    <!-- 4. Lower Fast Accent Trail Arrow -->
+    <g opacity="0.85" filter="url(#arrowGlow)">
+      <path d="M 410 375 Q 490 395 570 378 L 565 368 L 595 383 L 568 398 L 570 388 Q 490 405 410 385 Z" 
+            fill="url(#arrowGrad)" />
+    </g>
+
+    <!-- SCATTERED SPEED PARTICLES & DASHES -->
+    <g fill="#00F6FF" filter="url(#arrowGlow)">
+      <polygon points="440,360 470,360 467,367 437,367" />
+      <polygon points="480,380 520,380 517,388 477,388" />
+      <polygon points="530,365 565,365 562,372 527,372" />
+      <polygon points="410,390 445,390 442,397 407,397" />
+      
+      <circle cx="610" cy="290" r="3.5" fill="#FFFFFF" />
+      <circle cx="640" cy="330" r="4.5" fill="#FFFFFF" />
+      <circle cx="550" cy="240" r="3" fill="#A6FAFF" />
+    </g>
+  </g>
+</svg>
