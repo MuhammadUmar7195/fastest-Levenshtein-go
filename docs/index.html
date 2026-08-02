@@ -45,22 +45,10 @@
     <script>
       window.$docsify = {
         name: 'Fastest Levenshtein Go',
-        basePath: '..',
-        loadSidebar: 'docs/_sidebar.md',
+        loadSidebar: '_sidebar.md',
         auto2top: true,
         homepage: 'README.md',
         themeColor: '#00ADD8',
-        plugins: [
-          function (hook, vm) {
-            hook.afterEach(function (html, next) {
-              // Docsify automatically rewrites Markdown images (![alt](path)),
-              // but it ignores raw HTML tags like <img src="images/logo.svg">.
-              // This plugin dynamically fixes the HTML image paths so they load perfectly!
-              var fixedHtml = html.replace(/src="images\//g, 'src="../images/');
-              next(fixedHtml);
-            });
-          },
-        ],
       };
     </script>
     <!-- Docsify v4 -->
