@@ -4,21 +4,21 @@
 
 # Fastest Levenshtein (Go Port)
 
-> High-performance bit-parallel Levenshtein distance implementation in Go, ported from [ka-weihe/fastest-levenshtein](https://github.com/ka-weihe/fastest-levenshtein) with native multi-core concurrency enhancements.
+> A fast, bit-parallel Levenshtein distance implementation in Go. Ported from [ka-weihe/fastest-levenshtein](https://github.com/ka-weihe/fastest-levenshtein) and optimized for Go's concurrency and memory model.
 
 [![Port Mortem 2026](https://img.shields.io/badge/Hackathon-Port%20Mortem%202026-red)](https://coderesurrection.com/2026)
-[![Repo pool repo](https://img.shields.io/badge/Repo%20pool%20repo-ka--weihe%2Ffastest--levenshtein-blue)](https://github.com/ka-weihe/fastest-levenshtein)
+[![Repo pool](https://img.shields.io/badge/Repo%20pool-ka--weihe%2Ffastest--levenshtein-blue)](https://github.com/ka-weihe/fastest-levenshtein)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 
 ---
 
-## Architectural Enhancements Over Original
+## Improvements Over the Original
 
-1. **Myers' Bit-Parallel Algorithm**: Translated 1:1 from [ka-weihe/fastest-levenshtein](https://github.com/ka-weihe/fastest-levenshtein) with precise bitwise coercion matching JavaScript's 32-bit operations (`& 31`).
-2. **Concurrent Batch Processing (`ClosestParallel`)**: Leverages Go goroutines and channels to distribute large array searches across multi-core CPUs—an architectural innovation absent in the single-threaded TypeScript version.
-3. **256x Equality-Bit Table Shrink**: Reduced memory lookup footprint from 256 KiB (`0x10000` UTF-16 code units) in JS to 1 KiB (`[256]uint32` byte table) in Go, making the hot path 0-allocation (`0 B/op`).
-4. **Native 64-bit Core Upgrade (`myers64`)**: Migrated the core 32-bit bitwise engine from the JS port into native `uint64`. This doubles the zero-allocation fast-path from 32 chars to **64 chars**.
-5. **$O(1)$ Prefix/Suffix Truncation**: Linearly scans and strips identical prefixes/suffixes before computation, eliminating entire chunks of work in $O(1)$ time for massive speedups on real-world strings (e.g., URLs, paths).
+1. **Myers' Bit-Parallel Algorithm**: Translated directly from the original repo, ensuring the bitwise math perfectly matches JavaScript's behavior.
+2. **Concurrent Batch Processing (`ClosestParallel`)**: Uses Go goroutines and channels to split large array searches across multiple CPU cores, which the original single-threaded version doesn't do.
+3. **Smaller Memory Footprint**: Changed the lookup table from indexing 16-bit characters (which takes 256 KiB per call) to indexing bytes (which takes just 1 KiB).
+4. **64-bit Support**: Updated the core bitwise engine to use Go's native `uint64`. This lets us process strings up to 64 characters long entirely on the stack (0 allocations), doubling the original 32-character limit.
+5. **Prefix and Suffix Trimming**: We scan and remove identical start and end characters before running the main algorithm. This saves a lot of time on real-world strings like file paths and URLs.
 
 ---
 
@@ -26,10 +26,7 @@
 
 ### 1. Direct Comparison: Go Port vs. Original TypeScript (`ka-weihe/fastest-levenshtein`)
 
-Benchmarked on the same machine (Intel i5-6200U @ 2.30GHz) using the original
-`fastest-levenshtein` methodology: 1,000 random strings of length $N$, distance
-computed across 500 consecutive pairs, reported as ops/sec. **The Go port
-outperforms the original TypeScript at every string length.**
+Benchmarked on an Intel i5-6200U @ 2.30GHz using the original methodology: 1,000 random strings of length $N$, distance computed across 500 consecutive pairs, reported as ops/sec.
 
 | Input Size ($N$) | Go Port (ops/sec) | Original TypeScript (ops/sec) | Speedup   |
 | ---------------- | ----------------- | ----------------------------- | --------- |
@@ -49,25 +46,25 @@ outperforms the original TypeScript at every string length.**
 
 ---
 
-### 2. Honest Comparative Estimates Across Go Ecosystem Libraries
+### 2. Comparison with Other Go Libraries
 
-Below is an honest comparison evaluating this port against major Go Levenshtein libraries and the original TypeScript source based on algorithm complexity, memory allocations, and multi-core scalability:
+Here is how this port compares against other major Go Levenshtein libraries based on algorithm type, memory allocations, and multi-core support:
 
 | Library / Implementation                                                                          | Language / Stack     | Primary Algorithm                  | Est. Relative Speed (N=32) | Memory Allocations ($\le 32$ chars) | Multi-Core Parallel Processing |   UTF-8 / Rune Support   |
 | :------------------------------------------------------------------------------------------------ | :------------------- | :--------------------------------- | :------------------------: | :---------------------------------: | :----------------------------: | :----------------------: |
 | **`MuhammadUmar7195/fastest-Levenshtein-go` (This Port)**                                         | **Go 1.21+**         | **Myers' Bit-Parallel (`uint32`)** |    **1.00x (Baseline)**    |             **0 B/op**              |  **Yes (`ClosestParallel`)**   | Byte-level (ASCII exact) |
-| [`ka-weihe/fastest-levenshtein`](https://github.com/ka-weihe/fastest-levenshtein) (Repo pool repo) | TypeScript / Node.js | Myers' Bit-Parallel (V8)           |   ~0.31x (3.17x slower)    |           V8 GC Overhead            |      No (Single-threaded)      |    UTF-16 Code Units     |
+| [`ka-weihe/fastest-levenshtein`](https://github.com/ka-weihe/fastest-levenshtein) (Repo pool repo)| TypeScript / Node.js | Myers' Bit-Parallel (V8)           |   ~0.31x (3.17x slower)    |           V8 GC Overhead            |      No (Single-threaded)      |    UTF-16 Code Units     |
 | `agnivade/levenshtein`                                                                            | Go                   | Standard Dynamic Programming       |    ~0.16x (~6x slower)     |            $O(N)$ Slices            |               No               |     Full UTF-8 Runes     |
 | `gnames/levenshtein`                                                                              | Go                   | Myers' Bit-Parallel Variant        |   ~0.60x (~1.6x slower)    |              Low Heap               |               No               |       UTF-8 Runes        |
 | `eaxis/levenshtein`                                                                               | Go                   | Matrix Dynamic Programming         |    ~0.08x (~12x slower)    |           Dynamic Slices            |               No               |       Byte / Rune        |
 | `pollen5/go-levenshtein`                                                                          | Go                   | Wagner-Fischer Matrix              |    ~0.07x (~14x slower)    |       $O(M \times N)$ Slices        |               No               |       Byte / Rune        |
 
-> **Key Architectural Takeaways:**
+> **Key Takeaways:**
 >
-> - **Zero Allocation Hot Path (Doubled)**: Upgraded to native `uint64` (`myers64`) to double the 0-allocation stack-only fast path from 32 to **64 characters**.
-> - **Prefix/Suffix Truncation**: $O(1)$ bounds reduction drastically shrinks input sizes for real-world strings (paths, URLs) before the matrix computes.
-> - **Bit-Parallel Matrix Compression**: Computes up to 64 matrix cells in a single 64-bit bitwise operation pass.
-> - **Scalability**: `ClosestParallel` introduces multi-core chunking via goroutines for batch comparisons across large slices.
+> - **No Heap Allocations (up to 64 chars)**: By using `uint64` and a smaller byte table, we avoid heap allocations for strings under 65 characters.
+> - **Prefix/Suffix Trimming**: Stripping matching characters from the ends makes a big difference for real-world strings before the main algorithm even runs.
+> - **Bit-Parallel Matrix**: Computes up to 64 matrix cells in a single 64-bit bitwise operation.
+> - **Scalability**: `ClosestParallel` breaks large lists into smaller chunks and processes them across multiple cores.
 
 ---
 
@@ -96,11 +93,9 @@ func main() {
 
 ## Testing & Verification
 
-**Differential testing against the original TypeScript implementation.** The
-test suite transpiles the real `ka-weihe/fastest-levenshtein` `mod.ts` with
-esbuild and drives it through Node, comparing every result against the Go
-port across **~29,000 randomized cases** (boundary lengths 31/32/33 and
-63/64/65, empty strings, and 4 KB strings). 100% behavioral equivalence.
+We tested this directly against the original TypeScript code. The test suite compiles the actual `ka-weihe/fastest-levenshtein` code using esbuild and runs it through Node.
+
+It compares the results against our Go port across **~29,000 randomized cases** (including edge cases like lengths of 31/32/33, empty strings, and long 4 KB strings). The behavior is 100% identical.
 
 ```bash
 # Full test suite + coverage
@@ -116,4 +111,4 @@ go test -run TestDifferentialAgainstOriginal -v
 
 ## Documentation
 
-See [DECISIONS.md](DECISIONS.md) for detailed architectural trade-offs, bitwise shift analysis, and differential test verification reports.
+See [DECISIONS.md](DECISIONS.md) for more details on the engineering trade-offs, bitwise shift differences between Go and JS, and the fuzzing strategy.
