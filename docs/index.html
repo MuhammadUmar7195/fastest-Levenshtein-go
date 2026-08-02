@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Fastest Levenshtein (Go Port) Documentation</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta
+      name="description"
+      content="High-performance bit-parallel Levenshtein distance implementation in Go."
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css"
+    />
+
+    <style>
+      :root {
+        --theme-color: #00add8;
+        --table-row-even-background: #1e1e1e;
+        --table-row-odd-background: #252525;
+        --table-cell-border-color: #333333;
+        --table-head-background: #00add8;
+        --table-head-color: #ffffff;
+      }
+      .markdown-section table {
+        width: 100%;
+        display: table;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .markdown-section table th {
+        background-color: var(--table-head-background);
+        color: var(--table-head-color);
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">Loading documentation...</div>
+    <script>
+      window.$docsify = {
+        name: 'Fastest Levenshtein Go',
+        basePath: '..',
+        loadSidebar: 'docs/_sidebar.md',
+        auto2top: true,
+        homepage: 'README.md',
+        themeColor: '#00ADD8',
+        plugins: [
+          function (hook, vm) {
+            hook.afterEach(function (html, next) {
+              // Docsify automatically rewrites Markdown images (![alt](path)),
+              // but it ignores raw HTML tags like <img src="images/logo.svg">.
+              // This plugin dynamically fixes the HTML image paths so they load perfectly!
+              var fixedHtml = html.replace(/src="images\//g, 'src="../images/');
+              next(fixedHtml);
+            });
+          },
+        ],
+      };
+    </script>
+    <!-- Docsify v4 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+    <!-- Docsify-Themeable Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
+  </body>
+</html>
