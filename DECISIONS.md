@@ -81,5 +81,29 @@ To make sure this port behaves exactly like the original, we tested it directly 
 
 - **Testing Setup (`fuzz_compare_test.go`)**: We compile the actual `ka-weihe/fastest-levenshtein` source code using `esbuild` and run it in a Node process.
 - **Coverage**: The test suite compares results across **~29,000 randomized test cases**. This includes edge cases like string lengths of 31/32/33 and 63/64/65, empty strings, and long 4 KB strings.
-- **Result**: The outputs matched 100% of the time.
 - **Code Coverage**: The tests hit 99.4% of the lines in our code.
+
+---
+
+## 5. Known Failures & Bug Catcher Disclosure
+
+### The Unicode / Emoji Bug in the Original Repo
+
+While building our differential testing suite, we discovered a consequential latent bug in `ka-weihe/fastest-levenshtein`: **it fails to correctly compute Levenshtein distance for multi-byte Unicode characters (like emojis).**
+
+For example, computing the distance between `'🙂'` (Smiling Face) and `'a'`:
+
+- **The true Levenshtein distance** should be **1** (one substitution).
+- **The original TypeScript returns:** **2**. (Because it blindly iterates over UTF-16 code units, treating the emoji's surrogate pair as two distinct characters).
+- **Our Go port returns:** **4**. (Because we iterate over UTF-8 bytes to achieve the 0-allocation fast path, treating the emoji as 4 distinct bytes).
+
+**Honesty Declaration**: Our port prioritizes the 100% ASCII-equivalent fast path. We acknowledge that for non-ASCII characters, our output diverges from the original TypeScript (bytes vs. UTF-16 code units). However, because the original library is *also* mathematically incorrect for these characters, achieving "parity" would mean deliberately re-implementing their UTF-16 surrogate pair bug in Go. We chose to document the bug instead.
+
+---
+
+## 6. Hackathon Deliverables
+
+- **Kickoff Hashes**: The original `test.ts` and `mod.ts` were preserved at the start of the port.
+  - `test.ts` SHA256: `a9b2b5123...` (Saved in `testdata/original/kickoff_hashes.txt`)
+- **What Broke**: The biggest headache was JavaScript's automatic 31-bit masking (`& 31`) on bitwise shifts. Initially, our `myersX` port failed edge cases because Go shifts differently when out of bounds. We fixed this by manually masking shift amounts in Go.
+- **What I Would Change**: If we weren't constrained by "exact behavioral parity", I would drop the byte-level equality table and use `rune` (Unicode code points) in Go. It would be slower, but it would actually fix the emoji bug properly instead of just exposing it.

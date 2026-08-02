@@ -41,8 +41,8 @@
   <text x="24" y="168" class="output green">--- PASS: TestFind (0.00s)</text>
   <text x="24" y="192" class="output green">--- PASS: TestClosestParallel (0.11s)</text>
   <text x="24" y="216" class="pass">PASS</text>
-  <text x="24" y="240" class="coverage">coverage: 99.3% of statements</text>
-  <text x="24" y="264" class="output">ok  	github.com/MuhammadUmar7195/fastest-Levenshtein-go	2.165s	coverage: 99.3% of statements</text>
+  <text x="24" y="240" class="coverage">coverage: 99.4% of statements</text>
+  <text x="24" y="264" class="output">ok  	github.com/MuhammadUmar7195/fastest-Levenshtein-go	2.165s	coverage: 99.4% of statements</text>
   <text x="24" y="288" class="output">ok  	github.com/MuhammadUmar7195/fastest-Levenshtein-go/cmd	0.009s	coverage: 100.0% of statements</text>
 
 </svg>

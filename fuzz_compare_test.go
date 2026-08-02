@@ -21,7 +21,7 @@ type tsRef struct {
 // compileOnce builds the ORIGINAL ka-weihe/fastest-levenshtein mod.ts to
 // CommonJS a single time per test process, then reuses the artifact.
 var compileOnce = sync.OnceValues(func() (*tsRef, error) {
-	srcDir := filepath.Join(os.Getenv("HOME"), "Desktop", "fastest-levenshtein")
+	srcDir := filepath.Join("testdata", "original")
 	modSrc, err := os.ReadFile(filepath.Join(srcDir, "mod.ts"))
 	if err != nil {
 		return nil, fmt.Errorf("read original mod.ts: %w", err)
