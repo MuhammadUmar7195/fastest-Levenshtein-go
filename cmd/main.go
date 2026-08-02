@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MuhammadUmar7195/fastest-Levenshtein-go"
+	"github.com/MuhammadUmar7195/levenshtein-go"
 )
 
 func main() {

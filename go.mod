@@ -1,3 +1,3 @@
-module github.com/MuhammadUmar7195/fastest-Levenshtein-go
+module github.com/MuhammadUmar7195/levenshtein-go
 
 go 1.20

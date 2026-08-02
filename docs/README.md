@@ -52,7 +52,7 @@ Here is how this port compares against other major Go Levenshtein libraries base
 
 | Library / Implementation                                                                          | Language / Stack     | Primary Algorithm                  | Est. Relative Speed (N=32) | Memory Allocations ($\le 32$ chars) | Multi-Core Parallel Processing |   UTF-8 / Rune Support   |
 | :------------------------------------------------------------------------------------------------ | :------------------- | :--------------------------------- | :------------------------: | :---------------------------------: | :----------------------------: | :----------------------: |
-| **`MuhammadUmar7195/fastest-Levenshtein-go` (This Port)**                                         | **Go 1.20+**         | **Myers' Bit-Parallel (`uint32`)** |    **1.00x (Baseline)**    |             **0 B/op**              |  **Yes (`ClosestParallel`)**   | Byte-level (ASCII exact) |
+| **`MuhammadUmar7195/levenshtein-go` (This Port)**                                         | **Go 1.20+**         | **Myers' Bit-Parallel (`uint32`)** |    **1.00x (Baseline)**    |             **0 B/op**              |  **Yes (`ClosestParallel`)**   | Byte-level (ASCII exact) |
 | [`ka-weihe/fastest-levenshtein`](https://github.com/ka-weihe/fastest-levenshtein) (Repo pool repo)| TypeScript / Node.js | Myers' Bit-Parallel (V8)           |   ~0.31x (3.17x slower)    |           V8 GC Overhead            |      No (Single-threaded)      |    UTF-16 Code Units     |
 | `agnivade/levenshtein`                                                                            | Go                   | Standard Dynamic Programming       |    ~0.16x (~6x slower)     |            $O(N)$ Slices            |               No               |     Full UTF-8 Runes     |
 | `gnames/levenshtein`                                                                              | Go                   | Myers' Bit-Parallel Variant        |   ~0.60x (~1.6x slower)    |              Low Heap               |               No               |       UTF-8 Runes        |
@@ -75,7 +75,7 @@ package main
 
 import (
  "fmt"
- "github.com/MuhammadUmar7195/fastest-Levenshtein-go"
+ "github.com/MuhammadUmar7195/levenshtein-go"
 )
 
 func main() {

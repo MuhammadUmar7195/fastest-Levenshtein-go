@@ -27,7 +27,7 @@
   <circle cx="40" cy="16" r="6" class="dot-yellow" />
   <circle cx="60" cy="16" r="6" class="dot-green" />
 
-  <text x="425" y="21" class="title">bash — fastest-Levenshtein-go — 80x24</text>
+  <text x="425" y="21" class="title">bash — levenshtein-go — 80x24</text>
 
   <!-- Terminal Content -->
   <text x="24" y="64">
@@ -42,7 +42,7 @@
   <text x="24" y="192" class="output green">--- PASS: TestClosestParallel (0.11s)</text>
   <text x="24" y="216" class="pass">PASS</text>
   <text x="24" y="240" class="coverage">coverage: 99.4% of statements</text>
-  <text x="24" y="264" class="output">ok  	github.com/MuhammadUmar7195/fastest-Levenshtein-go	2.165s	coverage: 99.4% of statements</text>
-  <text x="24" y="288" class="output">ok  	github.com/MuhammadUmar7195/fastest-Levenshtein-go/cmd	0.009s	coverage: 100.0% of statements</text>
+  <text x="24" y="264" class="output">ok  	github.com/MuhammadUmar7195/levenshtein-go	2.165s	coverage: 99.4% of statements</text>
+  <text x="24" y="288" class="output">ok  	github.com/MuhammadUmar7195/levenshtein-go/cmd	0.009s	coverage: 100.0% of statements</text>
 
 </svg>
