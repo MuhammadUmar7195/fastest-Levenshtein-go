@@ -1,0 +1,4 @@
+=== RUN   TestDifferentialAgainstOriginal
+--- PASS: TestDifferentialAgainstOriginal (73.56s)
+PASS
+ok  	github.com/MuhammadUmar7195/levenshtein-go	73.576s

@@ -1,0 +1,13 @@
+{
+  "system": "Intel i5-6200U @ 2.30GHz",
+  "benchmarks": {
+    "N=4": { "go_ops_sec": 18994, "ts_ops_sec": 13575, "speedup": 1.40 },
+    "N=8": { "go_ops_sec": 15039, "ts_ops_sec": 4892, "speedup": 3.07 },
+    "N=16": { "go_ops_sec": 8259, "ts_ops_sec": 3260, "speedup": 2.53 },
+    "N=32": { "go_ops_sec": 5227, "ts_ops_sec": 1651, "speedup": 3.17 },
+    "N=64": { "go_ops_sec": 2305, "ts_ops_sec": 252, "speedup": 9.14 },
+    "N=128": { "go_ops_sec": 205, "ts_ops_sec": 129, "speedup": 1.58 },
+    "N=256": { "go_ops_sec": 59, "ts_ops_sec": 35, "speedup": 1.68 }
+  },
+  "allocations": "0 B/op up to N=64"
+}
